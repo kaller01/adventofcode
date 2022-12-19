@@ -11,9 +11,9 @@ fn main() {
     let rounds = parse_input::<Round>(&input,parse_outcome);
     let mut hands_for_rounds: Vec<(Hand,Hand)> = Vec::new();
 
-    for round in rounds {
-        let my_hand = cheat_round(&round.0,&round.1);
-        hands_for_rounds.push((round.0, my_hand)); 
+    for (opponent_hand, outcome) in rounds {
+        let my_hand = cheat_round(&opponent_hand,&outcome);
+        hands_for_rounds.push((opponent_hand, my_hand)); 
     }
     // println!("{:?}",hands_for_rounds);
     let points = calculate_score(hands_for_rounds);
@@ -58,9 +58,7 @@ fn cheat_round(opponent: &Hand, outcome: &Round) -> Hand {
 
 fn calculate_score(rounds: Vec<(Hand,Hand)>) -> u32 {
     let mut points = 0;
-    for hands in rounds {
-        let my_hand = hands.1;
-        let opponent_hand = hands.0;
+    for (my_hand, opponent_hand) in rounds {
         let round = play_round(&opponent_hand,&my_hand);
         points += match my_hand {
             Hand::Rock=>1,
